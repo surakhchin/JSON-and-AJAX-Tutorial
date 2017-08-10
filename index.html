@@ -1,0 +1,115 @@
+<header>
+<h1>JSON and AJAX</h1>
+  <button id="btn">Fetch Info for 3 New Animals</button>
+
+<style>
+    html, body {
+  padding: 0;
+  margin: 0;
+}
+
+.hide-me {
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(.75);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 2.4em;
+  font-weight: normal;
+  display: inline-block;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  padding: 50px 10%;
+}
+
+button {
+  background-color: #046380;
+  color: #FFF;
+  border: none;
+  padding: 10px 15px;
+  font-size: 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 2px 2px 0 #034154;
+  margin-bottom: 10px;
+  margin-left: 18px;
+  transition: opacity .4s ease-out, transform .4s ease-out, visibility .4s ease-out;
+  position: relative;
+  top: -10px;
+}
+
+button:hover {
+  background-color: #034F66;
+}
+
+button:active {
+  background-color: #034154;
+  box-shadow: none;
+  position: relative;
+  top: -8px;
+  left: 2px;
+}
+
+p {
+  padding: 4px 0 2px 8px;
+  line-height: 1.7;
+  border-bottom: 1px dotted #DDD;
+  list-style: none;
+  margin: 0;
+}
+</style>
+
+
+</header>
+
+<div id="animal-info"></div>
+
+<script type="text/javascript">
+    //our problem is we want to load new data on each click so we have to modify the URL 1 number by introducting counter variable, so every time button is clicked we access a new URL data set
+var pageCounter = 1;
+//create a variable that points to empty div
+var animalContainer = document.getElementById('animal-info');
+//create javascript var to point to html button element
+var btn = document.getElementById('btn');
+// set up an event listenser for when the button is clicked
+btn.addEventListener('click', function(){
+  //copy and paste our ajax call
+  var ourRequest = new XMLHttpRequest();
+
+  //make URL DYNAMIC with pageCounter variable
+ourRequest.open('GET', 'https://learnwebcode.github.io/json-example/animals-' +pageCounter+'.json');
+ourRequest.onload = function() {
+  var ourData = JSON.parse(ourRequest.responseText);
+  //add a function call to renderHTML and pass it in ourData variable to work with.
+  renderHTML(ourData);
+};
+ourRequest.send();
+ //add pageCounter iterator
+  pageCounter++;
+});
+
+//create a new function whose sole job is to create HTML
+function renderHTML(data) {
+  //withink this function we can access the data that got pulled in with AJAX via data var
+  //remember this functions job is to add html to empty div element with id animal-info
+  //first create a variable where we gonna push all our html string renders, we are doing this bc we now can loop through the json data we received via ajax and we can keep adding on to this htmlstring variable, first we set it to be an empty string
+  var htmlString  = '';
+  //we are gonnna loop through our ARRAY OF PET OBJECTS AND DO SOMETHING ONCE FOR EACH OBJECT IN DATA ARRAY
+  for (i = 0; i < data.length; i++){
+    //we decide what we add to each item in DATA array, we want to concatinate the htmlstring var
+    htmlString += '<p>' + data[i].name + ' is a ' + data[i].species + '.</p>';
+  }
+
+  animalContainer.insertAdjacentHTML('beforeend', htmlString)
+
+};
+
+
+
+
+</script>
