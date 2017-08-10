@@ -91,6 +91,11 @@ ourRequest.onload = function() {
 ourRequest.send();
  //add pageCounter iterator
   pageCounter++;
+  //adding an if statement if coutner too big hide the button by adding a css class to hide to button element
+  if (pageCounter > 3) {
+  //notice that hide me is a custom class we defined earlier that has visibility hidden
+  btn.classList.add('hide-me');
+  }
 });
 
 //create a new function whose sole job is to create HTML
@@ -102,7 +107,36 @@ function renderHTML(data) {
   //we are gonnna loop through our ARRAY OF PET OBJECTS AND DO SOMETHING ONCE FOR EACH OBJECT IN DATA ARRAY
   for (i = 0; i < data.length; i++){
     //we decide what we add to each item in DATA array, we want to concatinate the htmlstring var
-    htmlString += '<p>' + data[i].name + ' is a ' + data[i].species + '.</p>';
+    htmlString += '<p>' + data[i].name + ' is a ' + data[i].species + 'that likes to eat ';
+    //everything we write will run once for each favorite food items:
+    for (ii = 0; ii < data[i].foods.likes.length; ii++) {
+      //concatinate favorite food items to the htmlString
+      //if first favorite food do this else do that
+      if (ii==0) {
+        htmlString += data[i].foods.likes[ii];
+      } else {
+        htmlString += " and " + data[i].foods.likes[ii];
+      }
+    }
+  htmlString += ' and dislikes ';
+
+    for (ii = 0; ii < data[i].foods.dislikes.length; ii++) {
+      //concatinate favorite food items to the htmlString
+      //if first favorite food do this else do that
+      if (ii==0) {
+        htmlString += data[i].foods.dislikes[ii];
+      } else {
+        htmlString += " and " + data[i].foods.dislikes[ii];
+      }
+    }
+
+
+  htmlString += '. </p>';
+
+
+
+
+
   }
 
   animalContainer.insertAdjacentHTML('beforeend', htmlString)
